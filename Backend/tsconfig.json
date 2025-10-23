@@ -15,6 +15,10 @@
     // "types": ["node"],
     // and npm install -D @types/node
 
+    // Decorator Support (needed for sequelize-typescript)
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
     // Other Outputs
     "sourceMap": false,
     "declaration": false,

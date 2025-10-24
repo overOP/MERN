@@ -1,26 +1,63 @@
-import express, { type Request, type Response } from "express";
+// controllers/authController.ts
+import { Request, Response } from "express";
 import User from "../../database/models/userModel";
+import bcrypt from "bcrypt";
+import { UniqueConstraintError } from "sequelize";
+import { checkRequiredFields } from "../../utils/validateFields";
+import { sendErrorResponse, sendSuccessResponse } from "../../utils/responseHelper";
 
 class AuthController {
-  // public and static is use to define a method that can be called
-  // without creating an instance of the class
-  public static async registerUser(req: Request, res: Response): Promise<void> {
-    const { username, email, password } = req.body;
-    if (!username || !email || !password) {
-      res.status(400).json({
-          message: "All fields are required: username, email, password",
-        });
+  public static async registerUser(req: Request, res: Response): Promise<Response | void> {
+    // Check required fields 
+    if (!checkRequiredFields(req.body, ["username", "email", "password"], res)) {
       return;
     }
 
-    await User.create({ 
-        username, 
-        email, 
-        password 
-    });
-    res.status(201).json({ 
-        message: "User registered successfully"
-    });
+    const { username, email, password } = req.body;
+
+    // Username validation
+    if (username.length < 3 || username.length > 30) {
+      return sendErrorResponse(res, "Username must be between 3 and 30 characters long", 400);
+    }
+
+    const usernameRegex = /^[a-zA-Z0-9_]+$/;
+    if (!usernameRegex.test(username)) {
+      return sendErrorResponse(res, "Username can only contain letters, numbers, and underscores", 400);
+    }
+
+    // Email validation (Gmail only)
+    const gmailRegex = /^[\w.+-]+@gmail\.com$/i;
+    if (!gmailRegex.test(email)) {
+      return sendErrorResponse(res, "Only Gmail addresses are allowed (e.g. user@gmail.com)", 400);
+    }
+
+    // Password validation
+    if (password.length < 6) {
+      return sendErrorResponse(res, "Password must be at least 6 characters long", 400);
+    }
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return sendErrorResponse(res, "User already exists", 409);
+    }
+
+    // Hash password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Create user (handle unique constraint race condition)
+    try {
+      await User.create({ username, email, password: hashedPassword });
+    } catch (err) {
+      if (err instanceof UniqueConstraintError) {
+        return sendErrorResponse(res, "User already exists", 409);
+      }
+      throw err;
+    }
+
+    // Send success response
+    return sendSuccessResponse(res, "User registered successfully", { username, email }, 201);
   }
 }
 

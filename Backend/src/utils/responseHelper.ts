@@ -2,17 +2,17 @@ import { Response } from "express";
 
 export const sendErrorResponse = (
   res: Response,
-  massage: string,
+  message: string,
   statusCode: number
 ) => {
-  return res.status(statusCode).json({ message: massage });
+  return res.status(statusCode).json({ message });
 };
 
 export const sendSuccessResponse = (
   res: Response,
-  massage: string,
+  message: string,
   data: any,
   statusCode: number
 ) => {
-  return res.status(statusCode).json({  message: massage, data });
+  return res.status(statusCode).json({  message, data });
 };

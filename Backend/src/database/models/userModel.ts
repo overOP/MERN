@@ -35,6 +35,12 @@ import {
         type: DataType.STRING,
     })
     declare password: string;
+
+    @Column({
+        type: DataType.ENUM('customer', 'admin'),
+        defaultValue: 'customer',
+    })
+    declare role: string;
  }
 
  export default User;

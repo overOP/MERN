@@ -6,4 +6,7 @@ const router:Router=express.Router();
 router.route("/register")
 .post(catchAsync(AuthController.registerUser));
 
+router.route("/login")
+.post(catchAsync(AuthController.loginUser));
+
 export default router;

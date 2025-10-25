@@ -18,7 +18,7 @@ sequelize.authenticate()
     console.error("❌ Unable to connect to the database:", err);
   });
 
-sequelize.sync()
+sequelize.sync({ force: false }) // true to update the database false to not
   .then(() => {
     console.log("✅ All models were synchronized successfully.");
   })

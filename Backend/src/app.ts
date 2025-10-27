@@ -4,8 +4,11 @@ dotenv.config();
 import express, { Application } from "express";
 import "./database/connection";
 
+
 // Routes
 import userRoutes from "./routes/auth/userRoutes";
+import adminSeed from "./seed/adminSeed";
+import productRoutes from "./routes/admin/productRoute";
 
 const app: Application = express();
 const port = process.env.PORT;
@@ -14,8 +17,12 @@ const port = process.env.PORT;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Seed
+adminSeed();
+
 // Routes
 app.use("/api", userRoutes);
+app.use("/api/admin", productRoutes);
 
 
 // Server

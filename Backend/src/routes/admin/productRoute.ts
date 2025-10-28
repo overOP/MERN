@@ -12,6 +12,8 @@ router.route("/product")
     auth.restrictTo(Role.Admin),
     upload.single("productImage"),
     catchAsync(productControllers.addProduct)
+  )
+  .get(catchAsync(productControllers.getAllProducts)
   );
 
 export default router;

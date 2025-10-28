@@ -43,7 +43,7 @@ class Product extends Model{
     @Column({
         type : DataType.STRING
     })
-    declare productImageUrl:string
+    declare productImage:string
 
      
 }

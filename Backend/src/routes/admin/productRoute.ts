@@ -16,4 +16,18 @@ router.route("/product")
   .get(catchAsync(productControllers.getAllProducts)
   );
 
+router.route("/product/:id")
+  .get(catchAsync(productControllers.getSingleProduct))
+  .delete(
+    auth.isAuthenticated,
+    auth.restrictTo(Role.Admin),
+    catchAsync(productControllers.deleteProduct)
+  )
+  .put(
+    auth.isAuthenticated,
+    auth.restrictTo(Role.Admin),
+    upload.single("productImage"),
+    catchAsync(productControllers.editProduct)
+  );
+
 export default router;

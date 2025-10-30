@@ -9,6 +9,7 @@ import "./database/connection";
 import userRoutes from "./routes/auth/userRoutes";
 import adminSeed from "./seed/adminSeed";
 import productRoutes from "./routes/admin/productRoute";
+import categoryRoute from "./routes/product/categoryRoute";
 import categoryController from "./controllers/product/categoryController";
 
 const app: Application = express();
@@ -24,6 +25,7 @@ adminSeed();
 // Routes
 app.use("/api", userRoutes);
 app.use("/api/admin", productRoutes);
+app.use("/api/admin", categoryRoute);
 
 
 // Server

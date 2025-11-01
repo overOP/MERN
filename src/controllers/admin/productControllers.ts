@@ -1,8 +1,9 @@
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import Product from "../../database/models/productModel";
 import { AuthRequest } from "../../middleware/auth";
 import User from "../../database/models/userModel";
 import Category from "../../database/models/categoryModel";
+import fs from "fs"
 
 class ProductController {
   // add product
@@ -130,12 +131,20 @@ class ProductController {
       });
       return;
     }
+    const existingProductImage = product.productImage;
+    fs.unlink("./src/uploads/" + existingProductImage, (err) => {
+      if (err) {
+        console.log("Error deleting file:", err);
+      }else{
+        console.log("File deleted successfully");
+      }
+    })
     await product.update({
       productName,
       productDescription,
       productPrice,
       productTotalStockQty,
-      productImage,
+      productImage: existingProductImage,
       categoryId,
     });
     res.status(200).json({
@@ -152,6 +161,14 @@ class ProductController {
       });
       return;
     }
+    const productImage = product.productImage;
+    fs.unlink("./src/uploads/" + productImage, (err) => {
+      if (err) {
+        console.log("Error deleting file:", err);
+      }else{
+        console.log("File deleted successfully");
+      }
+    });
     await product.destroy();
     res.status(200).json({
       message: "Product deleted successfully",

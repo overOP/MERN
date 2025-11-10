@@ -11,6 +11,7 @@ import adminSeed from "./seed/adminSeed";
 import productRoutes from "./routes/admin/productRoute";
 import categoryRoute from "./routes/product/categoryRoute";
 import categoryController from "./controllers/product/categoryController";
+import cartRoute from "./routes/cart/caryRoute";
 
 const app: Application = express();
 const port = process.env.PORT;
@@ -26,6 +27,7 @@ adminSeed();
 app.use("/api", userRoutes);
 app.use("/api/admin", productRoutes);
 app.use("/api/admin", categoryRoute);
+app.use("/api", cartRoute);
 
 
 // Server

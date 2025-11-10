@@ -1,4 +1,4 @@
-import e, { Request, Response } from "express";
+import { Request, Response } from "express";
 import Product from "../../database/models/productModel";
 import { AuthRequest } from "../../middleware/auth";
 import User from "../../database/models/userModel";

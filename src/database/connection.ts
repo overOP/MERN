@@ -3,6 +3,8 @@ import User from "./models/userModel";
 import Product from "./models/productModel";
 import Category from "./models/categoryModel";
 import Cart from "./models/caetModel";
+import Order from "./models/orderModel";
+import OrderDetail from "./models/orderDetailsModel";
 
 const sequelize = new Sequelize({
   database: process.env.DB_NAME!,
@@ -45,6 +47,14 @@ Cart.belongsTo(User,{foreignKey : 'userId'})
 // user-cart relation 
 Product.hasMany(Cart,{foreignKey:'productId'})
 Cart.belongsTo(Product,{foreignKey:'productId'})
+
+// order-orderdetail relation
+Order.hasMany(OrderDetail,{foreignKey:'orderId'})
+OrderDetail.belongsTo(Order,{foreignKey:'orderId'})
+
+// orderdetail-product relation 
+Product.hasMany(OrderDetail,{foreignKey:'productId'})
+OrderDetail.belongsTo(Product,{foreignKey:'productId'})
 
 
 export default sequelize;

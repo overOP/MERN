@@ -12,6 +12,7 @@ import productRoutes from "./routes/admin/productRoute";
 import categoryRoute from "./routes/product/categoryRoute";
 import categoryController from "./controllers/product/categoryController";
 import cartRoute from "./routes/cart/caryRoute";
+import orderRoute from "./routes/order/orderRoute";
 
 const app: Application = express();
 const port = process.env.PORT;
@@ -28,6 +29,7 @@ app.use("/api", userRoutes);
 app.use("/api/admin", productRoutes);
 app.use("/api/admin", categoryRoute);
 app.use("/api", cartRoute);
+app.use("/api", orderRoute);
 
 
 // Server
